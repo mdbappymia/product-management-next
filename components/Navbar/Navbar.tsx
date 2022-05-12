@@ -1,14 +1,13 @@
 import Link from "next/link";
 import React, { useState } from "react";
 import useAuth from "../../hooks/useAuth";
+import { useRouter } from "next/router";
 
 const Navbar = () => {
   const { googleLogin } = useAuth();
   const [active, setActive] = useState(false);
-
-  const handleClick = () => {
-    setActive(!active);
-  };
+  const router = useRouter();
+  console.log(router.pathname);
   return (
     <div className=" bg-indigo-700 py-3">
       <nav className="flex items-center flex-wrap container mx-auto ">
@@ -27,7 +26,7 @@ const Navbar = () => {
           </a>
         </Link>
         <button
-          onClick={handleClick}
+          onClick={() => setActive(!active)}
           className=" inline-flex p-3 hover:bg-gray-900 rounded lg:hidden text-white ml-auto hover:text-white outline-none"
         >
           <svg
@@ -53,34 +52,52 @@ const Navbar = () => {
           <div className="lg:inline-flex lg:flex-row lg:ml-auto lg:w-auto w-full lg:items-center items-start  flex flex-col lg:h-auto">
             <Link href="/">
               <a
-                onClick={handleClick}
-                className="lg:inline-flex lg:w-auto w-full px-3 py-2 rounded text-white font-bold items-center justify-center hover:bg-gray-600 hover:text-white "
+                onClick={() => setActive(false)}
+                className={`${
+                  router.pathname === "/" ? "active" : ""
+                } lg:inline-flex lg:w-auto w-full px-3 py-2 rounded text-white font-bold items-center justify-center hover:bg-gray-600 hover:text-white`}
               >
                 Home
               </a>
             </Link>
             <Link href="/">
               <a
-                onClick={handleClick}
-                className="lg:inline-flex lg:w-auto w-full px-3 py-2 rounded text-white font-bold items-center justify-center hover:bg-gray-600 hover:text-white"
+                onClick={() => setActive(false)}
+                className={`${
+                  router.pathname === "/services" ? "active" : ""
+                } lg:inline-flex lg:w-auto w-full px-3 py-2 rounded text-white font-bold items-center justify-center hover:bg-gray-600 hover:text-white`}
               >
                 Services
               </a>
             </Link>
-            <Link href="/">
+            <Link href="/about-us">
               <a
-                onClick={handleClick}
-                className="lg:inline-flex lg:w-auto w-full px-3 py-2 rounded text-white font-bold items-center justify-center hover:bg-gray-600 hover:text-white"
+                onClick={() => setActive(false)}
+                className={`${
+                  router.pathname === "/about-us" ? "active" : ""
+                } lg:inline-flex lg:w-auto w-full px-3 py-2 rounded text-white font-bold items-center justify-center hover:bg-gray-600 hover:text-white`}
               >
                 About us
               </a>
             </Link>
             <Link href="/">
               <a
-                onClick={handleClick}
-                className="lg:inline-flex lg:w-auto w-full px-3 py-2 rounded text-white font-bold items-center justify-center hover:bg-gray-600 hover:text-white"
+                onClick={() => setActive(false)}
+                className={`${
+                  router.pathname === "/contact" ? "active" : ""
+                } lg:inline-flex lg:w-auto w-full px-3 py-2 rounded text-white font-bold items-center justify-center hover:bg-gray-600 hover:text-white`}
               >
                 Contact
+              </a>
+            </Link>
+            <Link href="/dashboard">
+              <a
+                onClick={() => setActive(false)}
+                className={`${
+                  router.pathname.includes("/dashboard") ? "active" : ""
+                } lg:inline-flex lg:w-auto w-full px-3 py-2 rounded text-white font-bold items-center justify-center hover:bg-gray-600 hover:text-white`}
+              >
+                Dashboard
               </a>
             </Link>
             <button

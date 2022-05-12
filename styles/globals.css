@@ -18,3 +18,9 @@ a {
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+.active{
+  background: #000 !important;
+}
+.dashboard-nav-active{
+  background-color: rgb(59, 4, 148);
+}
