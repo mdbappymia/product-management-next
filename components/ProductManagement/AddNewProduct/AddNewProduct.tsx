@@ -1,6 +1,9 @@
 import React, { FC } from "react";
 
-const AddNewProduct: FC = () => {
+interface IProps {
+  setAddProductShow: Function;
+}
+const AddNewProduct: FC<IProps> = () => {
   return (
     <div>
       <h1>Add new product</h1>
