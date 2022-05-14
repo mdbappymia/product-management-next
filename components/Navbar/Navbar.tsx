@@ -7,7 +7,6 @@ const Navbar = () => {
   const { googleLogin } = useAuth();
   const [active, setActive] = useState(false);
   const router = useRouter();
-  console.log(router.pathname);
   return (
     <div className=" bg-indigo-700 py-3">
       <nav className="flex items-center flex-wrap container mx-auto ">
