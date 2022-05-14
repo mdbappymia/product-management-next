@@ -19,7 +19,7 @@ const Products: FC = () => {
           </button>
         </div>
         {addProductShow && (
-          <div className="absolute h-full w-full top-0 left-0 bg-gray-200">
+          <div className="absolute h-full w-full top-0 left-0 bg-white">
             <AddNewProduct setAddProductShow={setAddProductShow} />
           </div>
         )}
