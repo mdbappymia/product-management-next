@@ -1,5 +1,7 @@
+import Image from "next/image";
 import { FC, useState } from "react";
 import { useForm } from "react-hook-form";
+import { getBase64 } from "../../../functions/imageProcess";
 
 interface IProps {
   setAddProductShow: Function;
@@ -13,9 +15,17 @@ const AddNewProduct: FC<IProps> = ({ setAddProductShow }) => {
   } = useForm();
   const [images, setImages] = useState([]);
   const [image, setImage] = useState(null);
+  const [viewImg, setViewImg] = useState("");
   const [categorySelected, setCategorySelected] = useState("select");
+  const [detailsList, setDetailsList] = useState<any>([]);
+  const [detailsText, setDetailsText] = useState("");
 
   const onSubmit = (data: any) => console.log(data);
+  const imageAdd = () => {
+    getBase64(image).then((data: any) => {
+      setViewImg(data);
+    });
+  };
 
   return (
     <div className="relative">
@@ -33,10 +43,20 @@ const AddNewProduct: FC<IProps> = ({ setAddProductShow }) => {
           <label className="w-full block">Product Name</label>
           <input className="border" {...register("productName")} />
           <div>
-            <label className="w-full">Products Images</label>
+            <label className="block">Products Images</label>
+            {viewImg !== "" && (
+              <Image src={viewImg} alt="" height={300} width={300} />
+            )}
             <div>
-              <input type="file" className="border p-2 outline-none" />
-              <button className="bg-indigo-800 px-5  py-2 border text-white font-bold uppercase">
+              <input
+                type="file"
+                className="border p-2 outline-none"
+                onChange={(e: any) => setImage(e.target.files[0])}
+              />
+              <button
+                onClick={imageAdd}
+                className="bg-indigo-800 px-5  py-2 border text-white font-bold uppercase"
+              >
                 Add
               </button>
             </div>
@@ -90,8 +110,32 @@ const AddNewProduct: FC<IProps> = ({ setAddProductShow }) => {
               )}
             </div>
           </div>
+
           <div>
-            <label>Produc</label>
+            <label className="block">Product Details</label>
+            {detailsList.length > 0 && (
+              <div>
+                {detailsList.map((item: string, i: number) => (
+                  <li key={i}>{item}</li>
+                ))}
+              </div>
+            )}
+            <br />
+            <input
+              type="text"
+              className="border"
+              onChange={(e) => setDetailsText(e.target.value)}
+              value={detailsText}
+            />
+            <button
+              className="bg-yellow-600 px-5 text-white"
+              onClick={() => {
+                setDetailsList([...detailsList, detailsText]);
+                setDetailsText("");
+              }}
+            >
+              Add
+            </button>
           </div>
 
           {/* <input {...register("exampleRequired", { required: true })} />
