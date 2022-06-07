@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { FC, useState } from "react";
 import { useForm } from "react-hook-form";
-import { getBase64 } from "../../../functions/imageProcess";
+import { getBase64} from "../../../functions/imageProcess";
 
 interface IProps {
   setAddProductShow: Function;
@@ -21,11 +21,27 @@ const AddNewProduct: FC<IProps> = ({ setAddProductShow }) => {
   const [detailsText, setDetailsText] = useState("");
 
   const onSubmit = (data: any) => console.log(data);
-  const imageAdd = () => {
-    getBase64(image).then((data: any) => {
-      setViewImg(data);
+  const imageAdd = (image:any) => {
+    getBase64(image).then((img: any) => {
+    //   setViewImg(img)
+      console.log(img)
+      fetch("/api/postImage/postImage",{
+          method:"POST",
+          headers:{
+              "content-type":"application/json"
+          },
+          body:JSON.stringify({
+              image:img,
+              id:"jklajfa",
+              folder:"Bappy"
+          })
+      }).then(res=>res.json()).then(data=>{
+        setViewImg(data.url)
+        console.log(data)
+      })
     });
   };
+
 
   return (
     <div className="relative">
@@ -45,7 +61,7 @@ const AddNewProduct: FC<IProps> = ({ setAddProductShow }) => {
           <div>
             <label className="block">Products Images</label>
             {viewImg !== "" && (
-              <Image src={viewImg} alt="" height={300} width={300} />
+              <img src={'../../'+ viewImg} alt="" height={300} width={300} />
             )}
             <div>
               <input
@@ -54,7 +70,7 @@ const AddNewProduct: FC<IProps> = ({ setAddProductShow }) => {
                 onChange={(e: any) => setImage(e.target.files[0])}
               />
               <button
-                onClick={imageAdd}
+                onClick={()=>imageAdd(image)}
                 className="bg-indigo-800 px-5  py-2 border text-white font-bold uppercase"
               >
                 Add
