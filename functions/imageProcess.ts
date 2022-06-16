@@ -1,5 +1,3 @@
-import fs from 'fs'
-
 export const getBase64 = (file: any) => {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();

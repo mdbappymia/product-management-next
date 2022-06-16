@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { FC, useState } from "react";
 import { useForm } from "react-hook-form";
-import { getBase64} from "../../../functions/imageProcess";
+import { getBase64 } from "../../../functions/imageProcess";
 
 interface IProps {
   setAddProductShow: Function;
@@ -10,38 +10,42 @@ const AddNewProduct: FC<IProps> = ({ setAddProductShow }) => {
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
   } = useForm();
-  const [images, setImages] = useState([]);
+  const [images, setImages] = useState<any>([]);
   const [image, setImage] = useState(null);
-  const [viewImg, setViewImg] = useState("");
+  const [name, setName] = useState("");
   const [categorySelected, setCategorySelected] = useState("select");
   const [detailsList, setDetailsList] = useState<any>([]);
   const [detailsText, setDetailsText] = useState("");
 
   const onSubmit = (data: any) => console.log(data);
-  const imageAdd = (image:any) => {
+  const imageAdd = (image: any) => {
     getBase64(image).then((img: any) => {
-    //   setViewImg(img)
-      console.log(img)
-      fetch("/api/postImage/postImage",{
-          method:"POST",
-          headers:{
-              "content-type":"application/json"
-          },
-          body:JSON.stringify({
-              image:img,
-              id:"jklajfa",
-              folder:"Bappy"
-          })
-      }).then(res=>res.json()).then(data=>{
-        setViewImg(data.url)
-        console.log(data)
+      //   setViewImg(img)
+      if (!name) {
+        alert("Please insert product name");
+        return;
+      }
+      console.log(img);
+      fetch("/api/postImage/postImage", {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({
+          image: img,
+          id: `${name.replace(" ", "_")}${Date.now()}`,
+          folder: name.replace(" ", "_"),
+        }),
       })
+        .then((res) => res.json())
+        .then((data) => {
+          setImages([...images, data]);
+        });
     });
   };
-
+  console.log(images);
 
   return (
     <div className="relative">
@@ -57,12 +61,21 @@ const AddNewProduct: FC<IProps> = ({ setAddProductShow }) => {
       <div className="p-10">
         <form onSubmit={handleSubmit(onSubmit)}>
           <label className="w-full block">Product Name</label>
-          <input className="border" {...register("productName")} />
+          <input
+            className="border"
+            onChange={(e: any) => setName(e.target.value)}
+          />
           <div>
             <label className="block">Products Images</label>
-            {viewImg !== "" && (
-              <img src={'../../'+ viewImg} alt="" height={300} width={300} />
-            )}
+            {images.map((image: any, i: any) => (
+              <Image
+                key={i}
+                src={"/" + image.url}
+                alt=""
+                height={300}
+                width={300}
+              />
+            ))}
             <div>
               <input
                 type="file"
@@ -70,13 +83,13 @@ const AddNewProduct: FC<IProps> = ({ setAddProductShow }) => {
                 onChange={(e: any) => setImage(e.target.files[0])}
               />
               <button
-                onClick={()=>imageAdd(image)}
+                onClick={() => imageAdd(image)}
                 className="bg-indigo-800 px-5  py-2 border text-white font-bold uppercase"
               >
                 Add
               </button>
             </div>
-            <input type="text" name="" id="" />
+            <input type="text" name="" className="border" />
           </div>
 
           <div>
