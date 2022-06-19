@@ -14,6 +14,7 @@ const AddNewProduct: FC<IProps> = ({ setAddProductShow }) => {
   } = useForm();
   const [images, setImages] = useState<any>([]);
   const [image, setImage] = useState(null);
+  const [mainImage, setMainImage] = useState("");
   const [name, setName] = useState("");
   const [categorySelected, setCategorySelected] = useState("select");
   const [detailsList, setDetailsList] = useState<any>([]);
@@ -27,7 +28,6 @@ const AddNewProduct: FC<IProps> = ({ setAddProductShow }) => {
         alert("Please insert product name");
         return;
       }
-      console.log(img);
       fetch("/api/postImage/postImage", {
         method: "POST",
         headers: {
@@ -45,7 +45,24 @@ const AddNewProduct: FC<IProps> = ({ setAddProductShow }) => {
         });
     });
   };
-  console.log(images);
+  console.log(mainImage);
+
+  const deleteImage = (imgUrl: any) => {
+    console.log("Clicked");
+    fetch("/api/deleteSingleImage/deleteImage", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ url: imgUrl }),
+    })
+      .then((res) => res.json())
+      .then((result) => {
+        if (result.acknowledged) {
+          setImages(images.filter((item: any) => item.url !== result.url));
+        }
+      });
+  };
 
   return (
     <div className="relative">
@@ -67,15 +84,24 @@ const AddNewProduct: FC<IProps> = ({ setAddProductShow }) => {
           />
           <div>
             <label className="block">Products Images</label>
-            {images.map((image: any, i: any) => (
-              <Image
-                key={i}
-                src={"/" + image.url}
-                alt=""
-                height={300}
-                width={300}
-              />
-            ))}
+            <div className="flex">
+              {images.map((image: any, i: any) => (
+                <div className=" relative" key={i}>
+                  <Image
+                    src={"/" + image.url}
+                    alt=""
+                    height={300}
+                    width={300}
+                  />
+                  <button
+                    onClick={() => deleteImage(image.url)}
+                    className="bg-red-600 px-2 absolute top-0 right-0"
+                  >
+                    &times;
+                  </button>
+                </div>
+              ))}
+            </div>
             <div>
               <input
                 type="file"
@@ -90,6 +116,29 @@ const AddNewProduct: FC<IProps> = ({ setAddProductShow }) => {
               </button>
             </div>
             <input type="text" name="" className="border" />
+          </div>
+
+          {/* product main image  */}
+          <div>
+            {images.length > 0 && (
+              <Image
+                src={"/" + mainImage || images[0].url}
+                alt=""
+                height={300}
+                width={300}
+              />
+            )}
+            <h1>Select main Image</h1>
+            <select
+              onChange={(e) => setMainImage(e.target.value)}
+              defaultValue={"/" + images[0]?.url || ""}
+            >
+              {images.map((image: any, i: number) => (
+                <option value={image.url} key={i}>
+                  {i}
+                </option>
+              ))}
+            </select>
           </div>
 
           <div>
@@ -145,7 +194,19 @@ const AddNewProduct: FC<IProps> = ({ setAddProductShow }) => {
             {detailsList.length > 0 && (
               <div>
                 {detailsList.map((item: string, i: number) => (
-                  <li key={i}>{item}</li>
+                  <li key={i}>
+                    {item}{" "}
+                    <button
+                      className="bg-red-600 text-white font-bold px-2"
+                      onClick={() =>
+                        setDetailsList(
+                          detailsList.filter((a: any) => a !== item)
+                        )
+                      }
+                    >
+                      &times;
+                    </button>
+                  </li>
                 ))}
               </div>
             )}
@@ -159,6 +220,9 @@ const AddNewProduct: FC<IProps> = ({ setAddProductShow }) => {
             <button
               className="bg-yellow-600 px-5 text-white"
               onClick={() => {
+                if (detailsText === "") {
+                  return;
+                }
                 setDetailsList([...detailsList, detailsText]);
                 setDetailsText("");
               }}
@@ -167,8 +231,18 @@ const AddNewProduct: FC<IProps> = ({ setAddProductShow }) => {
             </button>
           </div>
 
-          {/* <input {...register("exampleRequired", { required: true })} />
-          <input {...register("exampleRequired", { required: true })} /> */}
+          <div>
+            <h1>Price</h1>
+            <input className="border" type="number" {...register("price")} />
+          </div>
+          <div>
+            <h1>Commission</h1>
+            <input
+              className="border"
+              type="number"
+              {...register("commission")}
+            />
+          </div>
 
           {errors.exampleRequired && <span>This field is required</span>}
 
