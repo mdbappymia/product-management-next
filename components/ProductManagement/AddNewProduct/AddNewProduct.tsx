@@ -19,11 +19,16 @@ const AddNewProduct: FC<IProps> = ({ setAddProductShow }) => {
   const [categorySelected, setCategorySelected] = useState("select");
   const [detailsList, setDetailsList] = useState<any>([]);
   const [detailsText, setDetailsText] = useState("");
+  // product size
+  const [size, setSize] = useState("");
+  const [sizes, setSizes] = useState<any[]>([]);
+  // product color
+  const [color, setColor] = useState("");
+  const [colors, setColors] = useState<any[]>([]);
 
   const onSubmit = (data: any) => console.log(data);
   const imageAdd = (image: any) => {
     getBase64(image).then((img: any) => {
-      //   setViewImg(img)
       if (!name) {
         alert("Please insert product name");
         return;
@@ -42,13 +47,16 @@ const AddNewProduct: FC<IProps> = ({ setAddProductShow }) => {
         .then((res) => res.json())
         .then((data) => {
           setImages([...images, data]);
+          if (!mainImage) {
+            setMainImage(data.url);
+            // console.log(data)
+          }
         });
     });
   };
-  console.log(mainImage);
+  // console.log(mainImage);
 
   const deleteImage = (imgUrl: any) => {
-    console.log("Clicked");
     fetch("/api/deleteSingleImage/deleteImage", {
       method: "POST",
       headers: {
@@ -60,10 +68,12 @@ const AddNewProduct: FC<IProps> = ({ setAddProductShow }) => {
       .then((result) => {
         if (result.acknowledged) {
           setImages(images.filter((item: any) => item.url !== result.url));
+          if (images.length === 1) {
+            setMainImage("");
+          }
         }
       });
   };
-
   return (
     <div className="relative">
       <h1 className="text-center font-bold uppercase text-2xl border-b-4">
@@ -77,11 +87,17 @@ const AddNewProduct: FC<IProps> = ({ setAddProductShow }) => {
       </button>
       <div className="p-10">
         <form onSubmit={handleSubmit(onSubmit)}>
-          <label className="w-full block">Product Name</label>
-          <input
-            className="border"
-            onChange={(e: any) => setName(e.target.value)}
-          />
+          <div>
+            <label className="w-full block">Product Name</label>
+            <input
+              className="border"
+              onChange={(e: any) => setName(e.target.value)}
+            />
+          </div>
+          <div>
+            <label className="w-full block">Product Description</label>
+            <input type="text" className="border" {...register("category")} />
+          </div>
           <div>
             <label className="block">Products Images</label>
             <div className="flex">
@@ -115,7 +131,6 @@ const AddNewProduct: FC<IProps> = ({ setAddProductShow }) => {
                 Add
               </button>
             </div>
-            <input type="text" name="" className="border" />
           </div>
 
           {/* product main image  */}
@@ -242,6 +257,84 @@ const AddNewProduct: FC<IProps> = ({ setAddProductShow }) => {
               type="number"
               {...register("commission")}
             />
+          </div>
+          <div>
+            <h1>Quantity</h1>
+            <input className="border" type="number" {...register("quantity")} />
+          </div>
+          {sizes.length > 0 && (
+            <div>
+              <h3>Product Sizes</h3>
+              {sizes.map((item: any, i: any) => (
+                <li key={i}>
+                  {item}{" "}
+                  <button
+                    className="bg-red-500 px-2"
+                    onClick={() =>
+                      setSizes(sizes.filter((i: any) => i !== item))
+                    }
+                  >
+                    X
+                  </button>
+                </li>
+              ))}
+            </div>
+          )}
+          <div>
+            <h1>Size</h1>
+            <input
+              className="border"
+              type="text"
+              onChange={(e: any) => setSize(e.target.value)}
+              value={size}
+            />
+            <button
+              className="border bg-green-500"
+              onClick={() => {
+                setSizes([...sizes, size]);
+                setSize("");
+              }}
+            >
+              Add Size
+            </button>
+          </div>
+
+          {/* color  */}
+          {colors.length > 0 && (
+            <div>
+              <h3>Product Colors</h3>
+              {colors.map((item: any, i: any) => (
+                <li key={i}>
+                  {item}{" "}
+                  <button
+                    className="bg-red-500 px-2"
+                    onClick={() =>
+                      setColors(colors.filter((i: any) => i !== item))
+                    }
+                  >
+                    X
+                  </button>
+                </li>
+              ))}
+            </div>
+          )}
+          <div>
+            <h1>Color</h1>
+            <input
+              className="border"
+              type="text"
+              onChange={(e: any) => setColor(e.target.value)}
+              value={color}
+            />
+            <button
+              className="border bg-green-500"
+              onClick={() => {
+                setColors([...colors, color]);
+                setColor("");
+              }}
+            >
+              Add Color
+            </button>
           </div>
 
           {errors.exampleRequired && <span>This field is required</span>}
