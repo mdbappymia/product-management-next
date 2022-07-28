@@ -11,6 +11,7 @@ const AddNewProduct: FC<IProps> = ({ setAddProductShow }) => {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm();
   const [images, setImages] = useState<any>([]);
   const [image, setImage] = useState(null);
@@ -26,7 +27,42 @@ const AddNewProduct: FC<IProps> = ({ setAddProductShow }) => {
   const [color, setColor] = useState("");
   const [colors, setColors] = useState<any[]>([]);
 
-  const onSubmit = (data: any) => console.log(data);
+  const onSubmit = (data: any) => {
+    const productData = {
+      ...data,
+      images: images,
+      mainImage: mainImage,
+      name: name,
+      details: detailsList,
+      sizes: sizes,
+      colors: colors,
+    };
+    // console.log(productData);
+    const isAddedProduct = window.confirm("Are you sure add product?");
+    if (isAddedProduct) {
+      fetch("/api/addProduct/addProduct", {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify(productData),
+      })
+        .then((res) => res.json())
+        .then((result) => {
+          console.log(result);
+          if (result.acknowledged) {
+            reset();
+            setImages([]);
+            setName("");
+            setMainImage("");
+            setDetailsList([]);
+            setSizes([]);
+            setColors([]);
+            alert("Successful");
+          }
+        });
+    }
+  };
   const imageAdd = (image: any) => {
     getBase64(image).then((img: any) => {
       if (!name) {
@@ -80,6 +116,7 @@ const AddNewProduct: FC<IProps> = ({ setAddProductShow }) => {
         Add new product
       </h1>
       <button
+        type="button"
         onClick={() => setAddProductShow(false)}
         className="absolute top-0 right-0 px-3 py-1 bg-red-700 text-white font-bold"
       >
@@ -96,7 +133,7 @@ const AddNewProduct: FC<IProps> = ({ setAddProductShow }) => {
           </div>
           <div>
             <label className="w-full block">Product Description</label>
-            <input type="text" className="border" {...register("category")} />
+            <textarea className="border" {...register("description")} />
           </div>
           <div>
             <label className="block">Products Images</label>
@@ -110,6 +147,7 @@ const AddNewProduct: FC<IProps> = ({ setAddProductShow }) => {
                     width={300}
                   />
                   <button
+                    type="button"
                     onClick={() => deleteImage(image.url)}
                     className="bg-red-600 px-2 absolute top-0 right-0"
                   >
@@ -125,6 +163,7 @@ const AddNewProduct: FC<IProps> = ({ setAddProductShow }) => {
                 onChange={(e: any) => setImage(e.target.files[0])}
               />
               <button
+                type="button"
                 onClick={() => imageAdd(image)}
                 className="bg-indigo-800 px-5  py-2 border text-white font-bold uppercase"
               >
@@ -212,6 +251,7 @@ const AddNewProduct: FC<IProps> = ({ setAddProductShow }) => {
                   <li key={i}>
                     {item}{" "}
                     <button
+                      type="button"
                       className="bg-red-600 text-white font-bold px-2"
                       onClick={() =>
                         setDetailsList(
@@ -233,6 +273,7 @@ const AddNewProduct: FC<IProps> = ({ setAddProductShow }) => {
               value={detailsText}
             />
             <button
+              type="button"
               className="bg-yellow-600 px-5 text-white"
               onClick={() => {
                 if (detailsText === "") {
@@ -269,6 +310,7 @@ const AddNewProduct: FC<IProps> = ({ setAddProductShow }) => {
                 <li key={i}>
                   {item}{" "}
                   <button
+                    type="button"
                     className="bg-red-500 px-2"
                     onClick={() =>
                       setSizes(sizes.filter((i: any) => i !== item))
@@ -289,6 +331,7 @@ const AddNewProduct: FC<IProps> = ({ setAddProductShow }) => {
               value={size}
             />
             <button
+              type="button"
               className="border bg-green-500"
               onClick={() => {
                 setSizes([...sizes, size]);
@@ -307,6 +350,7 @@ const AddNewProduct: FC<IProps> = ({ setAddProductShow }) => {
                 <li key={i}>
                   {item}{" "}
                   <button
+                    type="button"
                     className="bg-red-500 px-2"
                     onClick={() =>
                       setColors(colors.filter((i: any) => i !== item))
@@ -327,6 +371,7 @@ const AddNewProduct: FC<IProps> = ({ setAddProductShow }) => {
               value={color}
             />
             <button
+              type="button"
               className="border bg-green-500"
               onClick={() => {
                 setColors([...colors, color]);
