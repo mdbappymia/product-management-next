@@ -2,11 +2,15 @@ import Link from "next/link";
 import React, { useState } from "react";
 import useAuth from "../../hooks/useAuth";
 import { useRouter } from "next/router";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store/store";
 
 const Navbar = () => {
   const { googleLogin } = useAuth();
   const [active, setActive] = useState(false);
   const router = useRouter();
+  const user: any = useSelector((state: RootState) => state.users.user);
+  console.log(user);
   return (
     <div className=" bg-indigo-700 py-3">
       <nav className="flex items-center flex-wrap container mx-auto ">
@@ -99,12 +103,21 @@ const Navbar = () => {
                 Dashboard
               </a>
             </Link>
-            <button
-              onClick={googleLogin}
-              className="bg-white px-5 py-2 rounded shadow hover:bg-gray-100 uppercase font-bold mx-2"
-            >
-              Login
-            </button>
+            {user.uid?.length > 0 ? (
+              <button
+                onClick={googleLogin}
+                className="bg-white px-5 py-2 rounded shadow hover:bg-gray-100 uppercase font-bold mx-2"
+              >
+                Log Out
+              </button>
+            ) : (
+              <button
+                onClick={googleLogin}
+                className="bg-white px-5 py-2 rounded shadow hover:bg-gray-100 uppercase font-bold mx-2"
+              >
+                Login
+              </button>
+            )}
           </div>
         </div>
       </nav>

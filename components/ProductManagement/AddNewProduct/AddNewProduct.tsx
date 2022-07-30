@@ -1,7 +1,9 @@
 import Image from "next/image";
 import { FC, useState } from "react";
 import { useForm } from "react-hook-form";
+import { useSelector } from "react-redux";
 import { getBase64 } from "../../../functions/imageProcess";
+import { RootState } from "../../../redux/store/store";
 
 interface IProps {
   setAddProductShow: Function;
@@ -13,6 +15,7 @@ const AddNewProduct: FC<IProps> = ({ setAddProductShow }) => {
     formState: { errors },
     reset,
   } = useForm();
+  const user: any = useSelector((state: RootState) => state.users.user);
   const [images, setImages] = useState<any>([]);
   const [image, setImage] = useState(null);
   const [mainImage, setMainImage] = useState("");
@@ -29,6 +32,7 @@ const AddNewProduct: FC<IProps> = ({ setAddProductShow }) => {
 
   const onSubmit = (data: any) => {
     const productData = {
+      user_id: user.uid,
       ...data,
       images: images,
       mainImage: mainImage,
@@ -40,7 +44,7 @@ const AddNewProduct: FC<IProps> = ({ setAddProductShow }) => {
     // console.log(productData);
     const isAddedProduct = window.confirm("Are you sure add product?");
     if (isAddedProduct) {
-      fetch("/api/addProduct/addProduct", {
+      fetch("/api/products/addProduct", {
         method: "POST",
         headers: {
           "content-type": "application/json",

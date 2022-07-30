@@ -1,8 +1,13 @@
 import { initializedAuthentication } from "../auth/firebase.init";
-import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import {
+  getAuth,
+  GoogleAuthProvider,
+  onAuthStateChanged,
+  signInWithPopup,
+} from "firebase/auth";
 import { useDispatch } from "react-redux";
-import { setUser } from "../redux/slices/userSlice";
-import { useState } from "react";
+import { setError, setIsLoading, setUser } from "../redux/slices/userSlice";
+import { useEffect, useState } from "react";
 initializedAuthentication();
 const useFirebase = () => {
   const [dropdownShow, setDropdownShow] = useState(false);
@@ -15,6 +20,18 @@ const useFirebase = () => {
       console.log(data.user);
     });
   };
+  useEffect(() => {
+    const unsubscribed = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        dispatch(setUser(user));
+        dispatch(setError(""));
+      } else {
+        dispatch(setUser({}));
+      }
+      dispatch(setIsLoading(false));
+      return () => unsubscribed;
+    });
+  }, [auth, dispatch]);
   return { googleLogin, setDropdownShow, dropdownShow };
 };
 
