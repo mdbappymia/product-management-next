@@ -3,7 +3,9 @@ import { client } from "../../../functions/dbConnect";
 const getAllProducts = async (req: any, res: any) => {
   try {
     await client.connect();
+
     if (req.method === "GET") {
+      console.log("database connect");
       const allProducts = await client
         .db("product_management")
         .collection("products")

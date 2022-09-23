@@ -11,6 +11,10 @@ const Layout: FC<IProps> = ({ children, title }) => {
     <div>
       <Head>
         <title>{title}</title>
+        <link
+          rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+        />
       </Head>
       <Navbar />
       {children}

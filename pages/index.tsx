@@ -1,11 +1,25 @@
 import type { NextPage } from "next";
+import Banner from "../components/Home/Banner/Banner";
 
 import Layout from "../components/Layout/Layout";
+import "swiper/css";
+import "swiper/css/effect-fade";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+import "animate.css";
+import Offers from "../components/Home/Offers/Offers";
+import TopCategories from "../components/Home/TopCategories/TopCategories";
+import NewArrival from "../components/Home/NewArrival/NewArrival";
+import HotDeal from "../components/Home/HotDeal/HotDeal";
 
 const Home: NextPage = () => {
   return (
     <Layout title="Homepage">
-      <h1></h1>
+      <Banner />
+      <Offers />
+      <TopCategories />
+      <NewArrival />
+      <HotDeal />
     </Layout>
   );
 };
