@@ -1,6 +1,7 @@
 import Head from "next/head";
 import { FC } from "react";
 import Navbar from "../Navbar/Navbar";
+import Footer from "../Shared/Footer/Footer";
 
 interface IProps {
   children: any;
@@ -18,6 +19,7 @@ const Layout: FC<IProps> = ({ children, title }) => {
       </Head>
       <Navbar />
       {children}
+      <Footer />
     </div>
   );
 };

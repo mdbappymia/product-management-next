@@ -11,6 +11,9 @@ import Offers from "../components/Home/Offers/Offers";
 import TopCategories from "../components/Home/TopCategories/TopCategories";
 import NewArrival from "../components/Home/NewArrival/NewArrival";
 import HotDeal from "../components/Home/HotDeal/HotDeal";
+import MostSold from "../components/Home/MostSold/MostSold";
+import HomeProducts from "../components/Home/HomeProducts/HomeProducts";
+import UserFeedback from "../components/Home/UserFeedback/UserFeedback";
 
 const Home: NextPage = () => {
   return (
@@ -18,8 +21,11 @@ const Home: NextPage = () => {
       <Banner />
       <Offers />
       <TopCategories />
-      <NewArrival />
+      <HomeProducts />
       <HotDeal />
+      <NewArrival />
+      <UserFeedback />
+      <MostSold />
     </Layout>
   );
 };
