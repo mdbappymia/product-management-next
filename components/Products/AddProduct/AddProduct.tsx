@@ -8,7 +8,7 @@ import { RootState } from "../../../redux/store/store";
 interface IProps {
   setAddProductShow: Function;
 }
-const AddNewProduct: FC<IProps> = ({ setAddProductShow }) => {
+const AddProduct: FC<IProps> = ({ setAddProductShow }) => {
   const {
     register,
     handleSubmit,
@@ -40,6 +40,7 @@ const AddNewProduct: FC<IProps> = ({ setAddProductShow }) => {
       details: detailsList,
       sizes: sizes,
       colors: colors,
+      uploadTime: Date.now(),
     };
     // console.log(productData);
     const isAddedProduct = window.confirm("Are you sure add product?");
@@ -395,4 +396,4 @@ const AddNewProduct: FC<IProps> = ({ setAddProductShow }) => {
   );
 };
 
-export default AddNewProduct;
+export default AddProduct;

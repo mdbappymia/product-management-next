@@ -1,6 +1,6 @@
 import React, { FC, useState } from "react";
-import DashboardLayout from "../../../components/Layout/DashboardLayout";
-import AddNewProduct from "../../../components/ProductManagement/AddNewProduct/AddNewProduct";
+import DashboardLayout from "../../../components/Shared/Layout/DashboardLayout";
+import AddProduct from "../../../components/Products/AddProduct/AddProduct";
 
 const Products: FC = () => {
   const [addProductShow, setAddProductShow] = useState(false);
@@ -20,7 +20,7 @@ const Products: FC = () => {
         </div>
         {addProductShow && (
           <div className="absolute h-full w-full top-0 left-0 bg-white">
-            <AddNewProduct setAddProductShow={setAddProductShow} />
+            <AddProduct setAddProductShow={setAddProductShow} />
           </div>
         )}
       </div>

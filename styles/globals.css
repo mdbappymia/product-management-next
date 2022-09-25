@@ -18,7 +18,7 @@ a {
 @tailwind components;
 @tailwind utilities;
 .active {
-  background: #000 !important;
+  background: rgb(148, 147, 147) !important;
 }
 .dashboard-nav-active {
   background-color: rgb(59, 4, 148);
@@ -43,4 +43,10 @@ a {
 }
 .swiper-pagination {
   margin-bottom: 50px;
+}
+.home-slider {
+  background-image: linear-gradient(rgb(179, 179, 179), rgb(255, 255, 255));
+}
+.slider-height {
+  min-height: 50vh !important;
 }

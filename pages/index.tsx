@@ -1,7 +1,7 @@
 import type { NextPage } from "next";
 import Banner from "../components/Home/Banner/Banner";
 
-import Layout from "../components/Layout/Layout";
+import Layout from "../components/Shared/Layout/Layout";
 import "swiper/css";
 import "swiper/css/effect-fade";
 import "swiper/css/navigation";
@@ -14,15 +14,22 @@ import HotDeal from "../components/Home/HotDeal/HotDeal";
 import MostSold from "../components/Home/MostSold/MostSold";
 import HomeProducts from "../components/Home/HomeProducts/HomeProducts";
 import UserFeedback from "../components/Home/UserFeedback/UserFeedback";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { fetchAllProducts } from "../redux/slices/productSlice";
 
 const Home: NextPage = () => {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(fetchAllProducts());
+  }, [dispatch]);
   return (
     <Layout title="Homepage">
       <Banner />
       <Offers />
       <TopCategories />
       <HomeProducts />
-      <HotDeal />
+      {/* <HotDeal /> */}
       <NewArrival />
       <UserFeedback />
       <MostSold />
